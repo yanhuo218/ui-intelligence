@@ -1,88 +1,109 @@
 # UI Intelligence
 
-[English](README.md)
+[English](README.md) · [发行版本](https://github.com/yanhuo218/My-ui-skill/releases)
 
-`ui-intelligence` 帮助编程 Agent 选择适合现有项目的 UI 组件。它先检查本地组件和设计 Token，再通过兼容的 Registry 补齐缺口。可以用它推荐设计方向、比较候选组件，也可以集成并验证选中的组件。
+UI Intelligence 为编程 Agent 提供一套现有项目的 UI 工作流，可用于设计、推荐组件、审查界面和集成实现。它先检查项目已有组件和设计 Token。需要外部代码时，内置的 UI Hub MCP 可以搜索 Registry、检查源码、评估兼容性并生成安装计划。Agent 审阅计划后，在用户授权的任务范围内执行。
 
-## 安装
+## 包含的能力
 
-安装器需要 Node.js 22.20 或更高版本、npm 和 Git，支持 Windows、macOS 和 Linux，并使用 Vercel Skills 处理各 Agent 的 Skill 安装位置。 [支持的 Agent](https://github.com/vercel-labs/skills#supported-agents)
+- **UI Intelligence Skill** 提供项目检查、设计决策、组件选型、开发和验证流程。
+- **UI Hub MCP** 统一搜索 shadcn、Magic UI、21st 和目标项目配置的 shadcn 兼容 Registry。
+- **辅助工具** 包括用于设计指导的 UI/UX Pro Max、四项 21st 官方 Skill 和 CLI，以及独立的 shadcn、Magic UI、frontend-inspo 和 21st MCP。按任务需要调用相应工具。 [工具用途和要求](skills/ui-intelligence/references/component-sources.md#tool-selection)
 
-通过 npm 安装后启动安装器。交互终端会默认勾选检测到的 Agent。用方向键移动，空格勾选或取消，回车确认。
+## 环境要求和客户端支持
+
+Windows、macOS 和 Linux 均可使用，需安装 Node.js 22.20 或更高版本、npm 和 Git。安装依赖和访问外部组件库需要联网。UI/UX Pro Max 的搜索脚本需要 Python 3。
+
+安装器可为 Codex、Claude Code、Cursor、VS Code GitHub Copilot、Gemini CLI 和 OpenCode 自动注册用户级 MCP。要自动注册 Codex，把 Codex CLI 加入 PATH。其他支持的 Agent 可安装 Skill，并使用各自的 MCP 配置方式。 [支持的 Agent ID](https://github.com/vercel-labs/skills#supported-agents)
+
+## 手动安装
+
+### 1. 安装命令行工具
+
+使用 GitHub 发行包。命令中的参数允许 npm 12 在本次安装中获取明确指定的远程包。
 
 ```sh
-npm install -g ui-intelligence-skill
+npm install -g --allow-remote=root https://github.com/yanhuo218/My-ui-skill/releases/download/v0.1.1/ui-intelligence-skill-0.1.1.tgz
+```
+
+对应版本在 npm 上可用后，也可按包名安装。 [查看 npm 发布状态](https://www.npmjs.com/package/ui-intelligence-skill)
+
+```sh
+npm install -g ui-intelligence-skill@0.1.1
+```
+
+### 2. 选择 Agent
+
+```sh
 ui-intelligence-skill
 ```
 
-也可以安装 GitHub Releases 上的版本化发行包。命令中的参数允许 npm 12 在本次安装中获取直接指定的远程包。
+安装器会默认勾选检测到的 Agent。用方向键移动，空格勾选或取消，回车确认。安装器会列出各客户端的缺项，依次安装 Skill 和 CLI、注册免鉴权 MCP、注册 21st MCP。已有的依赖 Skill 和 MCP 条目会被复用。
+
+脚本安装可以传入一个或多个明确的 Agent ID。使用 `--yes` 会选择所有检测到的 Agent，非交互运行且未指定 Agent 时也采用此行为。
 
 ```sh
-npm install -g --allow-remote=root https://github.com/yanhuo218/My-ui-skill/releases/download/v0.1.0/ui-intelligence-skill-0.1.0.tgz
-ui-intelligence-skill
+ui-intelligence-skill --agent codex --agent claude-code
 ```
 
-如果已经下载源码，在仓库根目录运行下列命令。
+从源码安装时，在仓库根目录运行。
 
 ```sh
 npm ci
-npm run install:skill
+npm run install:skill -- --agent claude-code
 ```
 
-可以多次传入 `--agent` 跳过菜单并指定 Agent。使用 `--yes` 会直接选择检测到的 Agent，非交互终端默认也是如此。常用标识包括 `codex`、`claude-code`、`cursor`、`github-copilot`、`gemini-cli`、`opencode`、`windsurf`、`cline` 和 `antigravity`。
+### 3. 完成配置
 
-```sh
-ui-intelligence-skill --agent codex --agent claude-code --agent cursor
+- **UI Hub** 使用本地 stdio。需要手动注册的客户端，将启动命令设为 `node`，唯一参数填入 `mcp/server.mjs` 的绝对路径。全局安装时，通过 `npm root -g` 找到其下的 `ui-intelligence-skill` 目录。从源码安装时，先运行 `npm ci` 并使用仓库内的路径。配置后让客户端持续可访问该路径。
+- **21st**。新注册的远程 21st MCP 需要在 Agent 进程可读取的环境中设置 `API_KEY_21ST`。已有配置时沿用能工作的鉴权方式。官方 CLI 和 UI Hub 内部的 21st 来源可使用 `21st login` 或进程环境中的 API Key。用 `21st whoami` 确认 CLI 会话。获取代码受账号权限和额度约束。 [21st MCP 配置](https://21st.dev/mcp) · [21st CLI 鉴权](https://help.21st.dev/cli)
+- **通过 shadcn 使用 Magic UI**。将 `"@magicui": "https://magicui.design/r/{name}.json"` 合并到目标应用已有的 `components.json` 的 `registries` 下，沿用同名的既有配置。配置项目安装之前，UI Hub 已可检索公开组件。 [Registry 配置说明](skills/ui-intelligence/references/component-sources.md#shadcn-and-magic-ui)
+- 重启 Agent 并确认它能发现 `ui-intelligence`。从目标应用做一次仅搜索的验证，查看真实调用和结果。
+
+对于使用 `mcpServers` JSON 配置的客户端，可把下面的条目合并到已有配置中，并替换为本机的绝对路径。VS Code 使用 `servers` 字段。 [VS Code MCP 配置说明](https://code.visualstudio.com/docs/copilot/customization/mcp-servers)
+
+```json
+{
+  "mcpServers": {
+    "ui-hub": {
+      "command": "node",
+      "args": ["/absolute/path/to/ui-intelligence-skill/mcp/server.mjs"]
+    }
+  }
+}
 ```
 
-使用共享 Skill 目录的客户端也可以通过 Vercel Skills 直接安装。GitHub Copilot 的原生用户目录由仓库安装脚本写入。 [VS Code 的 Skill 目录](https://code.visualstudio.com/docs/agent-customization/agent-skills#skill-locations)
+首次验证连接时，可让 Agent 调用 `search_components` 搜索 `card`，并将 `context.sources` 设为 `["@shadcn"]`。这个检查在配置 21st 凭据前即可运行。
 
-```sh
-npx -y skills@1.9.0 add . --skill ui-intelligence --global --yes
-```
+## 让 Agent 自动安装
 
-### 自动安装的依赖
+把下列提示词发给能运行终端命令的 Agent。按自己的客户端替换 `claude-code`。
 
-安装计划会列出各 Agent 待安装的 Skill 和待注册的 MCP。安装器先安装 Skill 和 CLI，再注册免鉴权的 MCP，最后注册 21st MCP。各 Agent 会复用已有依赖和 MCP 配置，本仓库的 Skill 内容有变动时会更新。
+> 请为 `claude-code` 安装 UI Intelligence v0.1.1。先检查 Node.js、npm 和 Git，再执行 `npm install -g --allow-remote=root https://github.com/yanhuo218/My-ui-skill/releases/download/v0.1.1/ui-intelligence-skill-0.1.1.tgz` 和 `ui-intelligence-skill --agent claude-code`。保留已有配置，安装阶段保持项目文件只读。报告新增或复用的 Skill、MCP，以及需要我完成的配置。需要凭据时，提示我在聊天之外完成设置。客户端重新加载后，确认能发现 `ui-intelligence`，只用 `@shadcn` 执行一次 UI Hub 的 `card` 只读搜索，并报告实际工具结果或具体阻塞原因。
 
-- **Skill** 包括 UI/UX Pro Max 和四个 21st 官方 Skill，分别是 `21st-cli-use`、`21st-ui-build`、`21st-ui-explore` 和 `21st-ui-review`。安装器会复用所选 Agent 已有的依赖。 [UI/UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) · [21st 官方 Skill](https://github.com/21st-dev/skill)
-- **21st CLI** 会在 PATH 中找不到 `21st` 命令时通过 npm 全局安装。
-- **MCP** 包括本地聚合服务 `ui-hub`、shadcn、Magic UI、frontend-inspo 和 21st。Codex、Claude Code、Cursor、VS Code 中的 GitHub Copilot、Gemini CLI 和 OpenCode 支持自动写入用户级配置。已有配置优先，其他客户端会收到手动配置说明。旧版 `--with-mcp` 参数仍然可用。
+## 使用 Skill
 
-### 手动配置
+在目标应用中开启新的 Agent 会话，说明你需要的交付内容，以及对新增依赖和外部来源的限制。
 
-安装器会在最后输出剩余配置步骤，凭据可在安装完成后填写。
+- **仅推荐。** “使用 `ui-intelligence` 比较紧凑且支持键盘排序的表格方案。先查找现有组件，再给出候选、取舍和待验证事项。”
+- **集成。** “使用 `ui-intelligence` 为分析页面集成紧凑且支持键盘排序的表格。复用现有 Token 和行为，审阅外部安装计划，并运行应用已有的检查。”
+- **审查。** “使用 `ui-intelligence` 审查分析表格在宽屏、窄屏及键盘操作下的表现，列出有依据的问题。”
 
-- 如果安装器新注册了 21st MCP，在 Agent 可读取的环境中设置 `API_KEY_21ST`。客户端已有 21st 配置时，沿用原有鉴权方式。 [21st 配置说明](https://21st.dev/mcp)
-- 需要使用 21st CLI 时，运行 `21st login` 登录，再用 `21st whoami` 确认。
-- 如果要**通过 shadcn** 使用 Magic UI，将 `@magicui` 条目并入目标应用已有的 `components.json`。 [Registry 配置](skills/ui-intelligence/references/component-sources.md)
-- 重新打开 Agent 会话并检查 MCP 连接。
+项目检查、来源选择、开发约束和验证标准见 [Skill 工作流](skills/ui-intelligence/SKILL.md)。
 
-## UI Hub MCP
+## UI Hub MCP 参考
 
-`ui-hub` 通过 stdio 在本机运行。安装器使用 Node 可执行文件及服务脚本的绝对路径来注册它。手动注册时，运行 `npm ci` 后将启动命令设为 `node`，参数填 `mcp/server.mjs` 的绝对路径。客户端启动服务时需要能访问该仓库。
+| 工具 | 用途 |
+| --- | --- |
+| `search_components` | 搜索各来源，返回排序后的候选和来源可用状态。 |
+| `get_component` | 获取候选的源码文件、依赖和许可证依据。 |
+| `evaluate_component` | 检查框架和依赖兼容性，返回阻塞项及待验证事项。 |
+| `prepare_install` | 生成只读安装计划，返回前置条件、文件目标和可用的命令参数。 |
 
-| 工具 | 入参 | 输出 |
-| --- | --- | --- |
-| `search_components` | `query`，可选 `context`、`limit` | 排序和去重后的候选组件，以及各来源状态 |
-| `get_component` | `source`、`id`，可选 `directory` | 源码文件、依赖和许可证依据 |
-| `evaluate_component` | `source`、`id`、`project` | 兼容性、依赖版本范围、评分、阻塞项和待验证事项 |
-| `prepare_install` | `source`、`id`、`project` | 前置条件、声明的目标路径和供 Agent 审阅的命令参数 |
-
-根据工具要求，将目标应用的绝对路径填入 `context.directory`、`directory` 或 `project.directory`。使用搜索返回的 `source` 和 `id`。默认来源包括 shadcn、Magic UI、21st 和项目已配置的 shadcn 兼容 Registry。21st 使用官方 CLI 的登录会话或 API Key，获取源码可能消耗账户额度。
-
-服务以只读方式检查项目和组件数据。安装或预览命令由 Agent 在任务范围内审阅并执行。 [工具参数、评分与计划状态](skills/ui-intelligence/references/component-sources.md#ui-hub-mcp)
-
-## 使用
-
-在目标前端项目中打开一个新的 Agent 会话，指定需要设计方向、组件推荐还是实际集成。
-
-> 使用 ui-intelligence 为当前分析仪表盘推荐表格组件。先检查项目现有组件和主题，再按来源、依赖和适配成本比较可用候选。
-
-要让 Agent 执行集成，可以追加“把选中的组件接入仪表盘，并运行项目已有的检查”。
-
-工作流包括项目分析、设计方向、组件检索、候选评估、源码获取、集成和验证。 [完整工作流](skills/ui-intelligence/SKILL.md) · [组件来源](skills/ui-intelligence/references/component-sources.md)
+传入目标应用的绝对路径，沿用搜索结果中的 `source` 和 `id`。执行命令前先审阅计划。 [参数、评分和计划状态](skills/ui-intelligence/references/component-sources.md#ui-hub-mcp)
 
 ## 验证
 
-运行 `npm ci` 后执行 `npm run test:install`，验证 npm 发行包、全局 CLI、分阶段安装、复装，以及四个 MCP 工具对本地 Registry 的调用。GitHub Actions 会在 Linux、Windows 和 macOS 上运行这项检查。 [安装验证工作流](https://github.com/yanhuo218/My-ui-skill/actions/workflows/install.yml)
+运行 `npm ci` 后执行 `npm run test:install`，可验证 npm 打包、全局 CLI 安装、Skill 和 MCP 注册、重复安装，以及四个 MCP 工具对本地 Registry 的调用。GitHub Actions 会在 Linux、Windows 和 macOS 上运行。 [安装验证工作流](https://github.com/yanhuo218/My-ui-skill/actions/workflows/install.yml)
+
+[MIT 许可证](LICENSE)

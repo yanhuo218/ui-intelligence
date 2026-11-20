@@ -1,88 +1,109 @@
 # UI Intelligence
 
-[简体中文](README_CN.md)
+[简体中文](README_CN.md) · [Releases](https://github.com/yanhuo218/My-ui-skill/releases)
 
-`ui-intelligence` helps coding agents choose UI components that fit an existing project. It starts with local components and design tokens, then uses compatible registries to fill gaps. It can recommend a design direction, compare candidates, or integrate and verify a selected component.
+UI Intelligence gives coding agents a workflow for designing, recommending, reviewing, and integrating UI in an existing app. It starts with the project's components and design tokens. When external code would fill a gap, the bundled UI Hub MCP can search registries, inspect source, evaluate compatibility, and prepare an installation plan. The agent reviews and applies the selected changes within the user’s requested scope.
 
-## Install
+## What you get
 
-The installer requires Node.js 22.20 or later, npm, and Git. It runs on Windows, macOS, and Linux and uses Vercel Skills to handle agent-specific Skill locations. [Supported agents](https://github.com/vercel-labs/skills#supported-agents)
+- **UI Intelligence Skill** guides project inspection, design decisions, component selection, integration, and verification.
+- **UI Hub MCP** unifies discovery for shadcn, Magic UI, 21st, and shadcn-compatible registries configured by the app.
+- **Supporting tools** include UI/UX Pro Max for design guidance, four official 21st Skills and its CLI, and the standalone shadcn, Magic UI, frontend-inspo, and 21st MCP servers. Each provider is used when it fits the task. [Tool roles and requirements](skills/ui-intelligence/references/component-sources.md#tool-selection)
 
-Install the package from npm and then launch its installer. In an interactive terminal, use the arrow keys to move, Space to toggle an agent, and Enter to confirm. Locally detected agents are preselected.
+## Requirements and client support
+
+Use Node.js 22.20 or later, npm, and Git on Windows, macOS, or Linux. An internet connection is needed for packages and external catalogs. Python 3 is needed only for the UI/UX Pro Max search scripts.
+
+The installer supports automatic user-level MCP registration for Codex, Claude Code, Cursor, VS Code GitHub Copilot, Gemini CLI, and OpenCode. Add Codex CLI to PATH for its automatic registration. Other supported agents can receive the Skill and use their own MCP setup. [Supported Agent IDs](https://github.com/vercel-labs/skills#supported-agents)
+
+## Manual installation
+
+### 1. Install the CLI
+
+Use the GitHub Release asset. The per-command option allows the explicitly requested remote package on npm 12.
 
 ```sh
-npm install -g ui-intelligence-skill
+npm install -g --allow-remote=root https://github.com/yanhuo218/My-ui-skill/releases/download/v0.1.1/ui-intelligence-skill-0.1.1.tgz
+```
+
+When the matching version is available on npm, you can install it by name. [npm package status](https://www.npmjs.com/package/ui-intelligence-skill)
+
+```sh
+npm install -g ui-intelligence-skill@0.1.1
+```
+
+### 2. Select the Agent
+
+```sh
 ui-intelligence-skill
 ```
 
-You can also install the versioned tarball from GitHub Releases. The URL install opts in to remote tarballs for this command on npm 12.
+The installer preselects detected agents. Use the arrow keys to move, Space to toggle, and Enter to confirm. It reports the missing items for each agent, then installs Skills and the CLI, registers MCP servers that require no credentials, and registers 21st MCP. It reuses existing dependency Skills and MCP entries.
+
+For a scripted setup, pass one or more explicit Agent IDs. `--yes` selects all detected agents, as does a non-interactive run with no Agent IDs.
 
 ```sh
-npm install -g --allow-remote=root https://github.com/yanhuo218/My-ui-skill/releases/download/v0.1.0/ui-intelligence-skill-0.1.0.tgz
-ui-intelligence-skill
+ui-intelligence-skill --agent codex --agent claude-code
 ```
 
-To run the installer from a source checkout, use these commands from the repository root.
+From a source checkout, use the repository installer.
 
 ```sh
 npm ci
-npm run install:skill
+npm run install:skill -- --agent claude-code
 ```
 
-Pass `--agent` more than once to select specific agents without opening the menu. Use `--yes` to select detected agents automatically, which is also the default in a non-interactive terminal. Common IDs include `codex`, `claude-code`, `cursor`, `github-copilot`, `gemini-cli`, `opencode`, `windsurf`, `cline`, and `antigravity`.
+### 3. Finish the configuration
 
-```sh
-ui-intelligence-skill --agent codex --agent claude-code --agent cursor
+- **UI Hub** uses local stdio. For clients that require manual registration, use `node` as the command and the absolute path to `mcp/server.mjs` as its sole argument. With a global install, this is under the `ui-intelligence-skill` folder returned by `npm root -g`. For a checkout, use the repository path after `npm ci`. Set the path in the client's MCP configuration and keep it available to the client.
+- **21st**. For a newly registered remote 21st MCP, set `API_KEY_21ST` in the environment inherited by the Agent. Keep existing working client credentials. For the official CLI and the 21st provider inside UI Hub, use `21st login` or provide the API key in the process environment. Confirm the CLI session with `21st whoami`. Account access and quota govern code retrieval. [21st MCP setup](https://21st.dev/mcp) · [21st CLI authentication](https://help.21st.dev/cli)
+- **Magic UI through shadcn**. Merge `"@magicui": "https://magicui.design/r/{name}.json"` into the target app's existing `components.json` under `registries`. Preserve an existing mapping. Public discovery in UI Hub can run before the target app is configured for installation. [Registry configuration](skills/ui-intelligence/references/component-sources.md#shadcn-and-magic-ui)
+- Restart the Agent, check that it detects `ui-intelligence`, and run a search-only smoke check from the target app. Inspect the tool call and result.
+
+For a client with an `mcpServers` JSON configuration, merge this entry into the existing file. Replace the example path with the actual absolute path on your machine. VS Code uses `servers` instead. [VS Code MCP configuration](https://code.visualstudio.com/docs/copilot/customization/mcp-servers)
+
+```json
+{
+  "mcpServers": {
+    "ui-hub": {
+      "command": "node",
+      "args": ["/absolute/path/to/ui-intelligence-skill/mcp/server.mjs"]
+    }
+  }
+}
 ```
 
-Clients that use the shared Skill directory can also install directly with Vercel Skills. Use the repository installer to populate GitHub Copilot's native user directory. [VS Code Skill locations](https://code.visualstudio.com/docs/agent-customization/agent-skills#skill-locations)
+For a first connection check, ask the Agent to call `search_components` for `card` with `context.sources` set to `["@shadcn"]`. This works before 21st credentials are configured.
 
-```sh
-npx -y skills@1.9.0 add . --skill ui-intelligence --global --yes
-```
+## Let an Agent install it
 
-### What the installer adds
+Paste this prompt into an Agent that can run shell commands. Replace `claude-code` with your client ID if needed.
 
-The plan identifies pending Skills and MCP entries for each selected agent. The installer installs Skills and the CLI first, registers MCP servers that require no credentials next, and registers 21st MCP last. Existing entries are reused, and the bundled Skill is updated when its files differ.
+> Install UI Intelligence v0.1.1 for `claude-code`. Check Node.js, npm, and Git. Run `npm install -g --allow-remote=root https://github.com/yanhuo218/My-ui-skill/releases/download/v0.1.1/ui-intelligence-skill-0.1.1.tgz`, then `ui-intelligence-skill --agent claude-code`. Keep my existing configuration and leave app files untouched during setup. Report which Skills and MCP entries were added or reused and which settings I need to complete. Ask me to configure any credentials outside the chat. Once the client reloads the installation, verify that `ui-intelligence` is discoverable and run a read-only UI Hub search for `card` using only `@shadcn`. Report the actual tool result or the specific blocker.
 
-- **Skills** include UI/UX Pro Max and four official 21st Skills, `21st-cli-use`, `21st-ui-build`, `21st-ui-explore`, and `21st-ui-review`. The installer reuses dependencies already available to each selected agent. [UI/UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) · [21st official Skills](https://github.com/21st-dev/skill)
-- **21st CLI** is installed globally through npm when the `21st` command is missing from PATH.
-- **MCP servers** include the local `ui-hub` aggregator, shadcn, Magic UI, frontend-inspo, and 21st. Automatic user-level configuration is available for Codex, Claude Code, Cursor, GitHub Copilot in VS Code, Gemini CLI, and OpenCode. Existing entries take precedence, and other clients receive setup instructions. The previous `--with-mcp` flag is still accepted.
+## Use the Skill
 
-### Manual setup
+Open a new session in the target app. Identify the requested outcome and any constraints on new dependencies or external providers.
 
-The installer prints the remaining setup steps at the end. Supply credentials after installation.
+- **Recommend only.** “Use `ui-intelligence` to compare options for a compact, keyboard-sortable table. Start with local components and return candidates, trade-offs, and what still needs checking.”
+- **Implement.** “Use `ui-intelligence` to integrate a compact, keyboard-sortable table into the analytics route. Reuse the existing tokens and table behavior, review any external install plan, and run the app's existing checks.”
+- **Review.** “Use `ui-intelligence` to review the analytics table at narrow and wide widths and with keyboard input. Report findings with evidence.”
 
-- For a newly registered 21st MCP server, set `API_KEY_21ST` in the agent's environment. If the client already has 21st configured, use its existing authentication method. [21st setup](https://21st.dev/mcp)
-- To use the 21st CLI, sign in with `21st login` if needed and confirm with `21st whoami`.
-- To use Magic UI **through shadcn**, merge the `@magicui` entry into the target app's existing `components.json`. [Registry configuration](skills/ui-intelligence/references/component-sources.md)
-- Reopen the agent session and check the MCP connections.
+The [Skill workflow](skills/ui-intelligence/SKILL.md) defines project inspection, source selection, development constraints, and verification.
 
-## UI Hub MCP
+## UI Hub MCP reference
 
-`ui-hub` runs locally over stdio. The installer registers it with the Node executable and the absolute server path. For manual registration, use `node` with the absolute path to `mcp/server.mjs` as its argument after running `npm ci`. Keep the repository at that path so the client can start it.
+| Tool | What it does |
+| --- | --- |
+| `search_components` | Searches providers and returns ranked candidates and provider availability. |
+| `get_component` | Retrieves source files, dependencies, and license evidence for a candidate. |
+| `evaluate_component` | Reports framework and dependency fit, blockers, and remaining checks. |
+| `prepare_install` | Returns a read-only install plan with prerequisites, file targets, and command arguments where available. |
 
-| Tool | Inputs | Output |
-| --- | --- | --- |
-| `search_components` | `query`, optional `context` and `limit` | Ranked, deduplicated candidates and per-source status |
-| `get_component` | `source`, `id`, optional `directory` | Source files, dependencies, and license evidence |
-| `evaluate_component` | `source`, `id`, `project` | Compatibility, dependency ranges, score, blockers, and items to verify |
-| `prepare_install` | `source`, `id`, `project` | Prerequisites, declared file targets, and command arguments for the agent to review |
-
-Pass the absolute target app directory as `context.directory`, `directory`, or `project.directory` as appropriate. Use the `source` and `id` from search results. The default sources are shadcn, Magic UI, 21st, and shadcn-compatible registries configured in the project. 21st uses the official CLI session or API key, and requesting source code can use the account's retrieval quota.
-
-The service reads the project and provider data. It returns installation and dry-run commands for the agent to review and execute when in scope. [Tool arguments, scoring, and plan statuses](skills/ui-intelligence/references/component-sources.md#ui-hub-mcp)
-
-## Use
-
-Open a new agent session in the target frontend project. Request a design direction, a component recommendation, or an implementation.
-
-> Use ui-intelligence to recommend a table component for this analytics dashboard. Check the project's existing components and theme, then compare available candidates by source, dependencies, and adaptation effort.
-
-To request implementation, add “Integrate the selected component into the dashboard and run the existing checks.”
-
-The workflow covers project inspection, design direction, discovery, evaluation, source acquisition, integration, and verification. [Full workflow](skills/ui-intelligence/SKILL.md) · [Component sources](skills/ui-intelligence/references/component-sources.md)
+Use the target app's absolute path and the exact `source` and `id` from search. Review the plan before running any command it returns. [Arguments, scores, and plan states](skills/ui-intelligence/references/component-sources.md#ui-hub-mcp)
 
 ## Verification
 
-Run `npm run test:install` after `npm ci` to check the npm package, global CLI, staged installation, repeat installation, and all four MCP tools against a local registry fixture. GitHub Actions runs this check on Linux, Windows, and macOS. [Package installation workflow](https://github.com/yanhuo218/My-ui-skill/actions/workflows/install.yml)
+Run `npm run test:install` after `npm ci` to verify packaging, global CLI installation, Skill and MCP registration, repeat installation, and all four MCP tools against a local Registry fixture. GitHub Actions runs this check on Linux, Windows, and macOS. [Installation workflow](https://github.com/yanhuo218/My-ui-skill/actions/workflows/install.yml)
+
+[MIT license](LICENSE)
