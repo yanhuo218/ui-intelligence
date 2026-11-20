@@ -2,7 +2,7 @@
 
 [English](README.md) · [发行版本](https://github.com/yanhuo218/ui-intelligence/releases)
 
-UI Intelligence 为编程 Agent 提供一套现有项目的 UI 工作流，可用于设计、推荐组件、审查界面和集成实现。它先检查项目已有组件和设计 Token。需要外部代码时，内置的 UI Hub MCP 可以搜索 Registry、检查源码、评估兼容性并生成安装计划。Agent 审阅计划后，在用户授权的任务范围内执行。
+UI Intelligence 为编程 Agent 提供适用于新建和现有项目的 UI 工作流，覆盖设计、组件推荐、界面审查和集成。多页项目会规划共用导航和每个页面的核心操作。内置的 UI Hub MCP 支持搜索组件库、检查源码、评估兼容性和生成安装计划。Agent 在任务范围内集成选中的组件，并验证它们实际渲染的位置。
 
 ## 包含的能力
 
@@ -87,6 +87,7 @@ npm run install:skill -- --agent claude-code
 
 - **仅推荐。** “使用 `ui-intelligence` 比较紧凑且支持键盘排序的表格方案。先查找现有组件，再给出候选、取舍和待验证事项。”
 - **集成。** “使用 `ui-intelligence` 为分析页面集成紧凑且支持键盘排序的表格。复用现有 Token 和行为，审阅外部安装计划，并运行应用已有的检查。”
+- **新建多页项目。** “使用 `ui-intelligence` 搭建概览、项目、任务和设置页。规划共用导航与各页的核心操作，比较合适的组件，核对实际采用组件的渲染位置，并复核四个页面的桌面端和移动端表现。”
 - **审查。** “使用 `ui-intelligence` 审查分析表格在宽屏、窄屏及键盘操作下的表现，列出有依据的问题。”
 
 项目检查、来源选择、开发约束和验证标准见 [Skill 工作流](skills/ui-intelligence/SKILL.md)。

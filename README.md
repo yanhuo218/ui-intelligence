@@ -2,7 +2,7 @@
 
 [简体中文](README_CN.md) · [Releases](https://github.com/yanhuo218/ui-intelligence/releases)
 
-UI Intelligence gives coding agents a workflow for designing, recommending, reviewing, and integrating UI in an existing app. It starts with the project's components and design tokens. When external code would fill a gap, the bundled UI Hub MCP can search registries, inspect source, evaluate compatibility, and prepare an installation plan. The agent reviews and applies the selected changes within the user’s requested scope.
+UI Intelligence gives coding agents a workflow for designing, recommending, reviewing, and integrating UI in new and existing apps. For multi-page work it covers the shared navigation and the main interaction on each route. The bundled UI Hub MCP helps the agent search registries, inspect source, evaluate compatibility, and review installation plans. The agent integrates selected components within the requested scope and verifies where they render.
 
 ## What you get
 
@@ -87,6 +87,7 @@ Open a new session in the target app. Identify the requested outcome and any con
 
 - **Recommend only.** “Use `ui-intelligence` to compare options for a compact, keyboard-sortable table. Start with local components and return candidates, trade-offs, and what still needs checking.”
 - **Implement.** “Use `ui-intelligence` to integrate a compact, keyboard-sortable table into the analytics route. Reuse the existing tokens and table behavior, review any external install plan, and run the app's existing checks.”
+- **Build a multi-page app.** “Use `ui-intelligence` to build the dashboard, projects, tasks, and settings routes. Plan the navigation and the main interaction on each route. Compare suitable components, verify each adoption at its render site, and review all four routes at desktop and mobile widths.”
 - **Review.** “Use `ui-intelligence` to review the analytics table at narrow and wide widths and with keyboard input. Report findings with evidence.”
 
 The [Skill workflow](skills/ui-intelligence/SKILL.md) defines project inspection, source selection, development constraints, and verification.
