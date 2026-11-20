@@ -8,7 +8,7 @@
     "url": "git+https://github.com/yanhuo218/My-ui-skill.git"
   },
   "bin": {
-    "ui-intelligence-skill": "./install.mjs"
+    "ui-intelligence-skill": "install.mjs"
   },
   "files": [
     "install.mjs",
