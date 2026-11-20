@@ -15,10 +15,10 @@ npm install -g ui-intelligence-skill
 ui-intelligence-skill
 ```
 
-也可以安装 GitHub Releases 上的版本化发行包。
+也可以安装 GitHub Releases 上的版本化发行包。命令中的参数允许 npm 12 在本次安装中获取直接指定的远程包。
 
 ```sh
-npm install -g https://github.com/yanhuo218/My-ui-skill/releases/download/v0.1.0/ui-intelligence-skill-0.1.0.tgz
+npm install -g --allow-remote=root https://github.com/yanhuo218/My-ui-skill/releases/download/v0.1.0/ui-intelligence-skill-0.1.0.tgz
 ui-intelligence-skill
 ```
 

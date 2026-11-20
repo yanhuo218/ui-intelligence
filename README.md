@@ -15,10 +15,10 @@ npm install -g ui-intelligence-skill
 ui-intelligence-skill
 ```
 
-You can also install the versioned tarball from GitHub Releases.
+You can also install the versioned tarball from GitHub Releases. The URL install opts in to remote tarballs for this command on npm 12.
 
 ```sh
-npm install -g https://github.com/yanhuo218/My-ui-skill/releases/download/v0.1.0/ui-intelligence-skill-0.1.0.tgz
+npm install -g --allow-remote=root https://github.com/yanhuo218/My-ui-skill/releases/download/v0.1.0/ui-intelligence-skill-0.1.0.tgz
 ui-intelligence-skill
 ```
 
