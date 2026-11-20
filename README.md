@@ -90,7 +90,7 @@ Open a new session in the target app. Identify the requested outcome and any con
 - **Build a multi-page app.** “Use `ui-intelligence` to build the dashboard, projects, tasks, and settings routes. Plan the navigation and the main interaction on each route. Compare suitable components, verify each adoption at its render site, and review all four routes at desktop and mobile widths.”
 - **Review.** “Use `ui-intelligence` to review the analytics table at narrow and wide widths and with keyboard input. Report findings with evidence.”
 
-The [Skill workflow](skills/ui-intelligence/SKILL.md) defines project inspection, source selection, development constraints, and verification.
+The [Skill workflow](skills/ui-intelligence/SKILL.md) defines project inspection, source selection, development constraints, and verification. The [page requirements](skills/ui-intelligence/references/page-design.md) cover two-level navigation, favicons and browser titles, icon meaning, text hierarchy, and motion.
 
 ## UI Hub MCP reference
 

@@ -90,7 +90,7 @@ npm run install:skill -- --agent claude-code
 - **新建多页项目。** “使用 `ui-intelligence` 搭建概览、项目、任务和设置页。规划共用导航与各页的核心操作，比较合适的组件，核对实际采用组件的渲染位置，并复核四个页面的桌面端和移动端表现。”
 - **审查。** “使用 `ui-intelligence` 审查分析表格在宽屏、窄屏及键盘操作下的表现，列出有依据的问题。”
 
-项目检查、来源选择、开发约束和验证标准见 [Skill 工作流](skills/ui-intelligence/SKILL.md)。
+项目检查、来源选择、开发约束和验证标准见 [Skill 工作流](skills/ui-intelligence/SKILL.md)。二级导航、站点图标与标签页标题、图标语义、文字层级及动效见 [页面验收要求](skills/ui-intelligence/references/page-design.md)。
 
 ## UI Hub MCP 参考
 
