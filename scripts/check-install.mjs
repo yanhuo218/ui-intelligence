@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { mkdtemp, mkdir, readFile, rm, stat, writeFile } from "node:fs/promises";
+import { mkdtemp, mkdir, readFile, realpath, rm, stat, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import { delimiter, join } from "node:path";
@@ -73,7 +73,7 @@ try {
   const before = await readFile(config, "utf8");
   const { mcpServers } = JSON.parse(before);
   assert.deepEqual(Object.keys(mcpServers), ["ui-hub", "shadcn", "magic-ui", "frontend-inspo", "21st"]);
-  assert.equal(mcpServers["ui-hub"].args[0], join(packageDirectory, "mcp", "server.mjs"));
+  assert.equal(await realpath(mcpServers["ui-hub"].args[0]), await realpath(join(packageDirectory, "mcp", "server.mjs")));
   assert.equal(mcpServers["21st"].headers["x-api-key"], "$" + "{API_KEY_21ST}");
   const repeat = await install();
   assert(repeat.stdout.includes("Skill 待安装或更新 无"));
