@@ -1,6 +1,6 @@
 # UI Intelligence
 
-[English](README.md) · [发行版本](https://github.com/yanhuo218/My-ui-skill/releases)
+[English](README.md) · [发行版本](https://github.com/yanhuo218/ui-intelligence/releases)
 
 UI Intelligence 为编程 Agent 提供一套现有项目的 UI 工作流，可用于设计、推荐组件、审查界面和集成实现。它先检查项目已有组件和设计 Token。需要外部代码时，内置的 UI Hub MCP 可以搜索 Registry、检查源码、评估兼容性并生成安装计划。Agent 审阅计划后，在用户授权的任务范围内执行。
 
@@ -23,7 +23,7 @@ Windows、macOS 和 Linux 均可使用，需安装 Node.js 22.20 或更高版本
 使用 GitHub 发行包。命令中的参数允许 npm 12 在本次安装中获取明确指定的远程包。
 
 ```sh
-npm install -g --allow-remote=root https://github.com/yanhuo218/My-ui-skill/releases/download/v0.1.1/ui-intelligence-skill-0.1.1.tgz
+npm install -g --allow-remote=root https://github.com/yanhuo218/ui-intelligence/releases/download/v0.1.1/ui-intelligence-skill-0.1.1.tgz
 ```
 
 对应版本在 npm 上可用后，也可按包名安装。 [查看 npm 发布状态](https://www.npmjs.com/package/ui-intelligence-skill)
@@ -79,7 +79,7 @@ npm run install:skill -- --agent claude-code
 
 把下列提示词发给能运行终端命令的 Agent。按自己的客户端替换 `claude-code`。
 
-> 请为 `claude-code` 安装 UI Intelligence v0.1.1。先检查 Node.js、npm 和 Git，再执行 `npm install -g --allow-remote=root https://github.com/yanhuo218/My-ui-skill/releases/download/v0.1.1/ui-intelligence-skill-0.1.1.tgz` 和 `ui-intelligence-skill --agent claude-code`。保留已有配置，安装阶段保持项目文件只读。报告新增或复用的 Skill、MCP，以及需要我完成的配置。需要凭据时，提示我在聊天之外完成设置。客户端重新加载后，确认能发现 `ui-intelligence`，只用 `@shadcn` 执行一次 UI Hub 的 `card` 只读搜索，并报告实际工具结果或具体阻塞原因。
+> 请为 `claude-code` 安装 UI Intelligence v0.1.1。先检查 Node.js、npm 和 Git，再执行 `npm install -g --allow-remote=root https://github.com/yanhuo218/ui-intelligence/releases/download/v0.1.1/ui-intelligence-skill-0.1.1.tgz` 和 `ui-intelligence-skill --agent claude-code`。保留已有配置，安装阶段保持项目文件只读。报告新增或复用的 Skill、MCP，以及需要我完成的配置。需要凭据时，提示我在聊天之外完成设置。客户端重新加载后，确认能发现 `ui-intelligence`，只用 `@shadcn` 执行一次 UI Hub 的 `card` 只读搜索，并报告实际工具结果或具体阻塞原因。
 
 ## 使用 Skill
 
@@ -104,6 +104,6 @@ npm run install:skill -- --agent claude-code
 
 ## 验证
 
-运行 `npm ci` 后执行 `npm run test:install`，可验证 npm 打包、全局 CLI 安装、Skill 和 MCP 注册、重复安装，以及四个 MCP 工具对本地 Registry 的调用。GitHub Actions 会在 Linux、Windows 和 macOS 上运行。 [安装验证工作流](https://github.com/yanhuo218/My-ui-skill/actions/workflows/install.yml)
+运行 `npm ci` 后执行 `npm run test:install`，可验证 npm 打包、全局 CLI 安装、Skill 和 MCP 注册、重复安装，以及四个 MCP 工具对本地 Registry 的调用。GitHub Actions 会在 Linux、Windows 和 macOS 上运行。 [安装验证工作流](https://github.com/yanhuo218/ui-intelligence/actions/workflows/install.yml)
 
 [MIT 许可证](LICENSE)

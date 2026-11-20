@@ -1,6 +1,6 @@
 # UI Intelligence
 
-[简体中文](README_CN.md) · [Releases](https://github.com/yanhuo218/My-ui-skill/releases)
+[简体中文](README_CN.md) · [Releases](https://github.com/yanhuo218/ui-intelligence/releases)
 
 UI Intelligence gives coding agents a workflow for designing, recommending, reviewing, and integrating UI in an existing app. It starts with the project's components and design tokens. When external code would fill a gap, the bundled UI Hub MCP can search registries, inspect source, evaluate compatibility, and prepare an installation plan. The agent reviews and applies the selected changes within the user’s requested scope.
 
@@ -23,7 +23,7 @@ The installer supports automatic user-level MCP registration for Codex, Claude C
 Use the GitHub Release asset. The per-command option allows the explicitly requested remote package on npm 12.
 
 ```sh
-npm install -g --allow-remote=root https://github.com/yanhuo218/My-ui-skill/releases/download/v0.1.1/ui-intelligence-skill-0.1.1.tgz
+npm install -g --allow-remote=root https://github.com/yanhuo218/ui-intelligence/releases/download/v0.1.1/ui-intelligence-skill-0.1.1.tgz
 ```
 
 When the matching version is available on npm, you can install it by name. [npm package status](https://www.npmjs.com/package/ui-intelligence-skill)
@@ -79,7 +79,7 @@ For a first connection check, ask the Agent to call `search_components` for `car
 
 Paste this prompt into an Agent that can run shell commands. Replace `claude-code` with your client ID if needed.
 
-> Install UI Intelligence v0.1.1 for `claude-code`. Check Node.js, npm, and Git. Run `npm install -g --allow-remote=root https://github.com/yanhuo218/My-ui-skill/releases/download/v0.1.1/ui-intelligence-skill-0.1.1.tgz`, then `ui-intelligence-skill --agent claude-code`. Keep my existing configuration and leave app files untouched during setup. Report which Skills and MCP entries were added or reused and which settings I need to complete. Ask me to configure any credentials outside the chat. Once the client reloads the installation, verify that `ui-intelligence` is discoverable and run a read-only UI Hub search for `card` using only `@shadcn`. Report the actual tool result or the specific blocker.
+> Install UI Intelligence v0.1.1 for `claude-code`. Check Node.js, npm, and Git. Run `npm install -g --allow-remote=root https://github.com/yanhuo218/ui-intelligence/releases/download/v0.1.1/ui-intelligence-skill-0.1.1.tgz`, then `ui-intelligence-skill --agent claude-code`. Keep my existing configuration and leave app files untouched during setup. Report which Skills and MCP entries were added or reused and which settings I need to complete. Ask me to configure any credentials outside the chat. Once the client reloads the installation, verify that `ui-intelligence` is discoverable and run a read-only UI Hub search for `card` using only `@shadcn`. Report the actual tool result or the specific blocker.
 
 ## Use the Skill
 
@@ -104,6 +104,6 @@ Use the target app's absolute path and the exact `source` and `id` from search. 
 
 ## Verification
 
-Run `npm run test:install` after `npm ci` to verify packaging, global CLI installation, Skill and MCP registration, repeat installation, and all four MCP tools against a local Registry fixture. GitHub Actions runs this check on Linux, Windows, and macOS. [Installation workflow](https://github.com/yanhuo218/My-ui-skill/actions/workflows/install.yml)
+Run `npm run test:install` after `npm ci` to verify packaging, global CLI installation, Skill and MCP registration, repeat installation, and all four MCP tools against a local Registry fixture. GitHub Actions runs this check on Linux, Windows, and macOS. [Installation workflow](https://github.com/yanhuo218/ui-intelligence/actions/workflows/install.yml)
 
 [MIT license](LICENSE)
