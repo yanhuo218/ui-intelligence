@@ -1,0 +1,40 @@
+{
+  "name": "ui-intelligence-skill",
+  "version": "0.1.0",
+  "description": "Install the UI Intelligence agent skill and the UI Hub component discovery MCP server.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yanhuo218/My-ui-skill.git"
+  },
+  "bin": {
+    "ui-intelligence-skill": "./install.mjs"
+  },
+  "files": [
+    "install.mjs",
+    "mcp/",
+    "skills/",
+    "README_CN.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=22.20.0"
+  },
+  "scripts": {
+    "install:skill": "node install.mjs",
+    "mcp": "node mcp/server.mjs",
+    "test:install": "node scripts/check-install.mjs"
+  },
+  "dependencies": {
+    "@21st-dev/cli": "1.18.0",
+    "@clack/prompts": "1.9.0",
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "jsonc-parser": "3.3.1",
+    "semver": "7.8.6",
+    "shadcn": "4.23.0",
+    "skills": "1.9.0",
+    "zod": "4.6.7"
+  }
+}

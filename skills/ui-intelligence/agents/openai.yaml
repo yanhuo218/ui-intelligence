@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI Intelligence"
+  short_description: "Discover, evaluate, and integrate reusable UI components"
+  default_prompt: "Use $ui-intelligence to find, evaluate, and integrate a component that fits this project."
