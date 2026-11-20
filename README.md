@@ -8,7 +8,14 @@
 
 The installer requires Node.js 22.20 or later, npm, and Git. It runs on Windows, macOS, and Linux and uses Vercel Skills to handle agent-specific Skill locations. [Supported agents](https://github.com/vercel-labs/skills#supported-agents)
 
-Install the versioned package from GitHub Releases and then launch its installer. In an interactive terminal, use the arrow keys to move, Space to toggle an agent, and Enter to confirm. Locally detected agents are preselected.
+Install the package from npm and then launch its installer. In an interactive terminal, use the arrow keys to move, Space to toggle an agent, and Enter to confirm. Locally detected agents are preselected.
+
+```sh
+npm install -g ui-intelligence-skill
+ui-intelligence-skill
+```
+
+You can also install the versioned tarball from GitHub Releases.
 
 ```sh
 npm install -g https://github.com/yanhuo218/My-ui-skill/releases/download/v0.1.0/ui-intelligence-skill-0.1.0.tgz

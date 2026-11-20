@@ -8,7 +8,14 @@
 
 安装器需要 Node.js 22.20 或更高版本、npm 和 Git，支持 Windows、macOS 和 Linux，并使用 Vercel Skills 处理各 Agent 的 Skill 安装位置。 [支持的 Agent](https://github.com/vercel-labs/skills#supported-agents)
 
-通过 npm 安装 GitHub Releases 上的版本化发行包，然后启动安装器。交互终端会默认勾选检测到的 Agent。用方向键移动，空格勾选或取消，回车确认。
+通过 npm 安装后启动安装器。交互终端会默认勾选检测到的 Agent。用方向键移动，空格勾选或取消，回车确认。
+
+```sh
+npm install -g ui-intelligence-skill
+ui-intelligence-skill
+```
+
+也可以安装 GitHub Releases 上的版本化发行包。
 
 ```sh
 npm install -g https://github.com/yanhuo218/My-ui-skill/releases/download/v0.1.0/ui-intelligence-skill-0.1.0.tgz
